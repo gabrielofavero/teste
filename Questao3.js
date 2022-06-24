@@ -1,41 +1,41 @@
 // Questão 3 (Executar em Node.js)
 
 const fs = require('fs');
+const VALOR = "valor"
 
 const _start = () => {
     console.log("Questão 3")
-    let result = {};
-    let faturamentoDiario = JSON.parse(fs.readFileSync('Questao3.json'));
-    let keys = Object.keys(faturamentoDiario);
-
-    for (let i=0; i< keys.length; i++){
-        let filtered = _filtrarVetor(faturamentoDiario[keys[i]]);
-        let mediaMes = _getMediaMes(filtered);
-        let valoresAcimaMM = _getValoresAcimaMM(mediaMes, filtered)  
-        
-        result[keys[i]] = {
-            "Maior Valor" : Math.max.apply(null, filtered),
-            "Menor Valor" : Math.min.apply(null, filtered),
-            "Qnt Dias que superaram a média": valoresAcimaMM
-        }
-    }
+    let faturamentoDiario = JSON.parse(fs.readFileSync('dados.json'));
+    let vetorValor = _getVetorValor(faturamentoDiario);
     
-    console.log(result);
+    let mediaMes = _getMediaMes(vetorValor);
+    let valoresAcimaMM = _getValoresAcimaMM(mediaMes, vetorValor);
+    
+    let result = {
+        "Maior Valor" : Math.max.apply(null, vetorValor),
+        "Menor Valor" : Math.min.apply(null, vetorValor),
+        "Qnt Dias que superaram a média": valoresAcimaMM
+    }
 
+    console.log(result);
 }
 
-function _filtrarVetor(vetor) {
-    return vetor.filter(function(item){
-      return item != null;
-    });
-   }
+function _getVetorValor(vetor) {
+    let result = [];
+    for (let i = 0; i < vetor.length; i++) {
+        if (vetor[i][VALOR]) {
+            result.push(vetor[i][VALOR]);
+        }
+    }
+    return result;
+}
 
 const _getMediaMes = (faturamentoDiario=[]) => {
     let size = 0;
     let sum = 0;
 
     for (let i = 0; i < faturamentoDiario.length; i++) {
-        sum += faturamentoDiario[i];
+        sum += faturamentoDiario[i][VALOR];
         size++;
     }
 
